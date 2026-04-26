@@ -62,6 +62,7 @@ Detailed technical deep dives are available in the `doc/` directory:
 2. `02_transformation_functions.md`
 3. `03_1_implementation_explained.md`
 4. `03_implementation_guide.md`
+5. `04_vision_bridge_and_stability.md`
 
 ---
 **Author:** Paulo Menezes  
