@@ -13,9 +13,25 @@ graph TD
     E --> F["Combine & Concat (B, S, 512)"]
 ```
 
-## 1. Tensor Shaping Mapping
+## 0. Notation Glossary
 
-To mitigate the risk of `RuntimeError: size mismatch` and ensure massive GPU parallelization without explicit Python loops, rigorous manipulation of tensor axes is mandatory. The architecture converges to what we call the **"God Shape"**: $(B, h, S, d_k)$.
+To understand the transformations below, we use the following standard notation:
+
+| Symbol | Definition | Description |
+| :--- | :--- | :--- |
+| **$B$** | **Batch Size** | Number of independent sequences processed in parallel. |
+| **$S$** | **Sequence Length** | Number of tokens (words or image patches) in a single sequence. |
+| **$h$** | **Heads** | Number of parallel attention mechanisms (Heads). |
+| **$d_{model}$** | **Model Dimension** | Total size of the embedding vector (e.g., 512). |
+| **$d_k$** | **Head Dimension** | Size of the feature vector per head ($d_k = d_{model} / h$). |
+
+---
+
+## 1. Mapping Transformations (Tensor Shaping)
+
+To mitigate the risk of `RuntimeError: size mismatch` and ensure massive GPU parallelization without explicit Python loops, rigorous manipulation of tensor axes is mandatory. 
+
+The architecture converges to what we call the **"God Shape"**: $(B, h, S, d_k)$. This specific arrangement is called "God Shape" because it places the Heads dimension ($h$) immediately after the Batch ($B$), allowing PyTorch to treat each head as an independent batch item. This enables the hardware to perform the attention calculation across all heads simultaneously.
 
 ### Shape Progression
 
