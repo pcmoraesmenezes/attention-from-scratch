@@ -74,11 +74,19 @@ Unlike the Encoder, the Decoder requires a guarantee of **non-anticipation** (ca
 ### The Look-ahead Mask Mechanism
 During training (Teacher Forcing), the model has access to the full sentence. To prevent **Information Leakage** from the future, we apply an upper triangular mask.
 
-1.  **Mask Matrix ($M$):**
-    $$M_{i,j} = \begin{cases} 0, & \text{if } i \ge j \\ -\infty, & \text{if } i < j \end{cases}$$
-2.  **Application:** 
-    $$\text{Attention}(Q, K, V)_{masked} = \text{Softmax}\left(\frac{QK^T + M}{\sqrt{d_k}}\right)V$$
-3.  **Result:** Values marked with $-\infty$ become $0$ after Softmax ($e^{-\infty} \to 0$).
+1. **Mask Matrix ($M$):**
+
+$$
+M_{i,j} = \begin{cases} 0, & \text{if } i \ge j \\\\ -\infty, & \text{if } i < j \end{cases}
+$$
+
+2. **Application:** 
+
+$$
+\text{Attention}(Q, K, V)_{masked} = \text{Softmax}\left(\frac{QK^T + M}{\sqrt{d_k}}\right)V
+$$
+
+3. **Result:** Values marked with $-\infty$ become $0$ after Softmax ($e^{-\infty} \to 0$).
 
 > [!NOTE]
 > This mechanism ensures that the hidden state of the token at position $i$ is computed using only information from positions $0, \dots, i$. During inference, this mask is what enables consistent auto-regressive generation.
