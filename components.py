@@ -71,7 +71,7 @@ class FeedForward(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.linear2 = nn.Linear(d_ff, d_model)
         
-        # GELU is a smooth activation function that helps gradients flow 
+        # GELU (Gaussian Error Linear Unit) is a smooth activation function that helps gradients flow 
         # better than the traditional ReLU, especially in deep Transformers.
         self.activation = nn.GELU()
 
